@@ -24,8 +24,6 @@ export default function Home({ loaderData }: Route.ComponentProps) {
 
   return (
     <div className="flex flex-col gap-10">
-      <title>Where's Scorpion?</title>
-      <meta property="og:title" content="Where's Scorpion?" />
       {navigation.state === "loading" ? (
         <img
           src={loadingIcon}
