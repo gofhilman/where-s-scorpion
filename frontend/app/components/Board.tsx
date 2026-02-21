@@ -25,6 +25,12 @@ export default function Board({ characters }: any) {
     setOpen(true);
     setCircle(true);
     setClosing(false);
+
+    // For data collection
+    console.log(
+      `x: ${((event.clientX - rect.left) / rect.width) * 1000}, y: ${((event.clientY - rect.top) / rect.height) * 1000}`,
+      `width: ${rect.width}, height: ${rect.height}`,
+    );
   };
 
   const handleOpenChange = (isOpen: any) => {
