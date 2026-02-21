@@ -12,3 +12,29 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model Board {
+  id        String     @id @default(uuid())
+  name      String     @unique
+  image     String
+  locations Location[]
+  histories History[]
+}
+
+model Location {
+  id      String @id @default(uuid())
+  board   Board  @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  boardId String
+  name    String @unique
+  area    Json
+  image   String
+}
+
+model History {
+  id         String    @id
+  playerName String?
+  startedAt  DateTime  @default(now())
+  finishedAt DateTime?
+  board      Board     @relation(fields: [boardId], references: [id])
+  boardId    String
+}
