@@ -5,8 +5,9 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider        = "prisma-client"
+  previewFeatures = ["typedSql"]
+  output          = "../generated/prisma"
 }
 
 datasource db {
@@ -18,17 +19,19 @@ model Board {
   name       String      @unique
   image      String
   characters Character[]
+  progresses Progress[]
   histories  History[]
 }
 
 model Character {
-  id        String    @id @default(uuid())
-  board     Board     @relation(fields: [boardId], references: [id], onDelete: Cascade)
-  boardId   String
-  name      String    @unique
-  area      Json
-  image     String
-  histories History[]
+  id         String     @id @default(uuid())
+  board      Board      @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  boardId    String
+  name       String     @unique
+  area       Json
+  image      String
+  progresses Progress[]
+  histories  History[]
 }
 
 model History {
@@ -36,7 +39,20 @@ model History {
   playerName String?
   startedAt  DateTime    @default(now())
   finishedAt DateTime?
+  duration   Float?
   board      Board       @relation(fields: [boardId], references: [id])
   boardId    String
   characters Character[]
+  progress   Progress[]
+}
+
+model Progress {
+  id          String    @id @default(uuid())
+  history     History   @relation(fields: [historyId], references: [id], onDelete: Cascade)
+  historyId   String
+  board       Board     @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  boardId     String
+  location    Float
+  character   Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
+  characterId String
 }

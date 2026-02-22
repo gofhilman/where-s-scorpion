@@ -1,0 +1,4 @@
+SELECT id
+FROM "Character"
+ORDER BY RANDOM()
+LIMIT 3

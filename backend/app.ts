@@ -2,12 +2,15 @@ import "dotenv/config";
 import "./config/passport";
 import express from "express";
 import cors from "cors";
+import indexRouter from "./routes/indexRouter";
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(cors());
+
+app.use(indexRouter);
 
 app.use((err: any, req: any, res: any, next: any) => {
   console.error(err);
