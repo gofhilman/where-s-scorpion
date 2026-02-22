@@ -65,7 +65,7 @@ model Progress {
   historyId   String
   board       Board     @relation(fields: [boardId], references: [id], onDelete: Cascade)
   boardId     String
-  position    Float
+  position    Json
   character   Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
   characterId String
 }
