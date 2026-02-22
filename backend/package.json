@@ -7,7 +7,8 @@
     "start": "tsx app.ts",
     "dev": "tsx watch app.ts",
     "data": "prisma studio --browser none",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "seed": "tsx prisma/seeds/game.ts"
   },
   "keywords": [],
   "author": "",

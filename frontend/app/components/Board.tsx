@@ -27,10 +27,10 @@ export default function Board({ characters }: any) {
     setClosing(false);
 
     // For data collection
-    console.log(
-      `x: ${((event.clientX - rect.left) / rect.width) * 1000}, y: ${((event.clientY - rect.top) / rect.height) * 1000}`,
-      `width: ${rect.width}, height: ${rect.height}`,
-    );
+    // console.log(
+    //   `x: ${(((event.clientX - rect.left) / rect.width) * 100).toFixed(3)}, y: ${(((event.clientY - rect.top) / rect.height) * 100).toFixed(3)}`,
+    //   `(width: ${rect.width.toFixed(3)}, height: ${rect.height.toFixed(3)})`,
+    // );
   };
 
   const handleOpenChange = (isOpen: any) => {
@@ -49,7 +49,7 @@ export default function Board({ characters }: any) {
         onClick={handleClick}
         src={boardImage}
         alt=""
-        className="w-full cursor-crosshair rounded-[30px]"
+        className="w-full cursor-crosshair rounded-4xl"
       />
       <DropdownMenu open={open} onOpenChange={handleOpenChange}>
         <DropdownMenuTrigger asChild>
@@ -62,7 +62,7 @@ export default function Board({ characters }: any) {
                 height: 0.05 * pos.width,
                 animation: `${closing ? "scale-out" : "scale-in"} 150ms forwards`,
               }}
-              className="absolute rounded-full bg-zinc-950/60"
+              className="absolute rounded-full bg-zinc-950/50"
             />
           )}
         </DropdownMenuTrigger>
