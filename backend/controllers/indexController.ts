@@ -1,4 +1,6 @@
+import { differenceInMilliseconds } from "date-fns";
 import { getRandomChars } from "../generated/prisma/sql";
+import checkPosition from "../lib/checkPosition";
 import { prisma } from "../lib/prisma";
 import jwt from "jsonwebtoken";
 
@@ -38,20 +40,15 @@ async function gameGet(req: any, res: any) {
   res.json({ game });
 }
 
-async function progressGet(req: any, res: any) {
-  const progress = await prisma.history.findUnique({
+async function statusGet(req: any, res: any) {
+  const status = await prisma.history.findUnique({
     where: { id: req.user.id },
-    select: {
-      progress: {
-        select: {
-          id: true,
-          location: true,
-          characterId: true,
-        },
-      },
+    include: {
+      tasks: true,
+      progress: true,
     },
   });
-  res.json({ progress });
+  res.json({ status });
 }
 
 async function gamePost(req: any, res: any) {
@@ -68,6 +65,12 @@ async function gamePost(req: any, res: any) {
       characters: {
         connect: characters,
       },
+      tasks: {
+        create: characters.map((character) => ({
+          boardId,
+          characterId: character.id,
+        })),
+      },
     },
   });
   jwt.sign(
@@ -83,18 +86,73 @@ async function gamePost(req: any, res: any) {
   );
 }
 
-async function checkPost(req: any, res: any) {}
+async function gamePatch(req: any, res: any) {
+  const game = await prisma.history.update({
+    where: { id: req.user.id },
+    data: { playerName: req.body.name },
+  });
+  res.json({ game });
+}
 
-async function gamePatch(req: any, res: any) {}
+async function statusPatch(req: any, res: any) {
+  const { position, characterId } = req.body;
+  const game = await prisma.history.findUnique({
+    where: { id: req.user.id },
+    include: {
+      tasks: {
+        include: { character: true },
+      },
+      progress: true,
+    },
+  });
+  const characters = game?.tasks.map((task) => task.character);
+  const character = checkPosition(characters, position);
+  if (character && game) {
+    let status = await prisma.history.update({
+      where: { id: req.user.id },
+      data: {
+        tasks: {
+          delete: game.tasks
+            .filter((task) => task.characterId === characterId)
+            .map((task) => ({ id: task.id })),
+        },
+        progress: {
+          create: { boardId: game.boardId, position, characterId },
+        },
+      },
+      include: {
+        tasks: true,
+        progress: true,
+      },
+    });
+    if (status.tasks.length === 0) {
+      status = await prisma.history.update({
+        where: { id: req.user.id },
+        data: {
+          finishedAt: new Date(),
+          duration: differenceInMilliseconds(new Date(), game.startedAt),
+        },
+        include: {
+          tasks: true,
+          progress: true,
+        },
+      });
+      return res.json({ status });
+    }
+    return res.json({ status });
+  } else {
+    return res.json({
+      status: {
+        ...game,
+        tasks: game?.tasks.map((task) => ({
+          id: task.id,
+          historyId: task.historyId,
+          boardId: task.boardId,
+          characterId: task.characterId,
+        })),
+      },
+    });
+  }
+}
 
-async function progressPatch(req: any, res: any) {}
-
-export {
-  leaderboardGet,
-  gameGet,
-  progressGet,
-  gamePost,
-  checkPost,
-  gamePatch,
-  progressPatch,
-};
+export { leaderboardGet, gameGet, statusGet, gamePost, gamePatch, statusPatch };

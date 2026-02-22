@@ -19,8 +19,9 @@ model Board {
   name       String      @unique
   image      String
   characters Character[]
-  progresses Progress[]
   histories  History[]
+  tasks      Task[]
+  progresses Progress[]
 }
 
 model Character {
@@ -28,10 +29,11 @@ model Character {
   board      Board      @relation(fields: [boardId], references: [id], onDelete: Cascade)
   boardId    String
   name       String     @unique
-  area       Json
+  location   Json
   image      String
-  progresses Progress[]
   histories  History[]
+  tasks      Task[]
+  progresses Progress[]
 }
 
 model History {
@@ -39,11 +41,22 @@ model History {
   playerName String?
   startedAt  DateTime    @default(now())
   finishedAt DateTime?
-  duration   Float?
+  duration   Int?
   board      Board       @relation(fields: [boardId], references: [id])
   boardId    String
   characters Character[]
+  tasks      Task[]
   progress   Progress[]
+}
+
+model Task {
+  id          String    @id @default(uuid())
+  history     History   @relation(fields: [historyId], references: [id], onDelete: Cascade)
+  historyId   String
+  board       Board     @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  boardId     String
+  character   Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
+  characterId String
 }
 
 model Progress {
@@ -52,7 +65,7 @@ model Progress {
   historyId   String
   board       Board     @relation(fields: [boardId], references: [id], onDelete: Cascade)
   boardId     String
-  location    Float
+  position    Float
   character   Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
   characterId String
 }
