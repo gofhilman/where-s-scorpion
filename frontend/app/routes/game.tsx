@@ -6,6 +6,7 @@ import { getGame } from "~/lib/api";
 import type { Route } from "./+types/game";
 import { Button } from "~/components/ui/button";
 import { useEffect } from "react";
+import HelpDialog from "~/components/HelpDialog";
 
 export async function clientLoader() {
   const {
@@ -21,14 +22,15 @@ export default function Game({ loaderData }: Route.ComponentProps) {
   const statusFetcher = useFetcher();
   let startedAt, finishedAt, duration, tasks, progress;
   if (statusFetcher.data) {
-    ({ startedAt, finishedAt, duration, tasks, progress } = statusFetcher.data.status);
+    ({ startedAt, finishedAt, duration, tasks, progress } =
+      statusFetcher.data.status);
   }
   useEffect(() => {
     statusFetcher.load("status");
   }, []);
 
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-5">
       {navigation.state === "loading" ? (
         <img
           src={loadingIcon}
@@ -37,27 +39,32 @@ export default function Game({ loaderData }: Route.ComponentProps) {
         />
       ) : (
         <>
-          <header className="sticky top-0 z-10">
-            <div className="flex items-center">
-              <h1 className="text-amber-400">
-                <Link to="/">Where's Scorpion?</Link>
-              </h1>
-              <Time startedAt={startedAt} />
-              <restartFetcher.Form action="restart" method="post">
-                <Button variant="outline" type="submit">
-                  Restart
-                </Button>
-              </restartFetcher.Form>
-            </div>
-            <div className="flex items-center">
-              <p>Find:</p>
-              <div className="flex items-center">
-                {characters.map((character: any) => (
-                  <div key={character.id} className="flex items-center">
-                    <img src={character.image} alt="" />
-                    <p>{character.name}</p>
-                  </div>
-                ))}
+          <header className="bg-background/95 sticky top-0 z-10 pt-12 pb-3">
+            <div className="mx-auto flex max-w-250 flex-col gap-3 lg:gap-5">
+              <div className="flex items-center justify-between">
+                <h1 className="font-semibold text-amber-400 lg:text-3xl">
+                  <Link to="/">Where's Scorpion?</Link>
+                </h1>
+                <Time startedAt={startedAt} />
+                <restartFetcher.Form action="restart" method="post">
+                  <Button variant="outline" type="submit">
+                    Restart
+                  </Button>
+                </restartFetcher.Form>
+              </div>
+              <div className="grid grid-cols-[auto_max-content] items-start">
+                <div className="grid grid-cols-3 justify-items-center">
+                  {characters.map((character: any) => (
+                    <div
+                      key={character.id}
+                      className="flex flex-col items-center gap-1"
+                    >
+                      <img src={character.image} alt="" className="h-20" />
+                      <p className="text-xs">{character.name}</p>
+                    </div>
+                  ))}
+                </div>
+                <HelpDialog className="justify-self-end" />
               </div>
             </div>
           </header>

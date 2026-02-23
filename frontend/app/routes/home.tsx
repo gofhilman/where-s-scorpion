@@ -30,7 +30,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   const navigation = useNavigation();
 
   return (
-    <div className="flex flex-col gap-10 lg:gap-15">
+    <div className="flex flex-col gap-10 pt-12 lg:gap-15">
       {navigation.state === "loading" ? (
         <img
           src={loadingIcon}
