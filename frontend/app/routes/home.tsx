@@ -1,4 +1,4 @@
-import { getLeaderboard } from "~/api/historyApi";
+import { getLeaderboard } from "~/lib/api";
 import type { Route } from "./+types/home";
 import { Link, useNavigation } from "react-router";
 import loadingIcon from "/mk-logo.svg?url";
@@ -34,7 +34,9 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         <>
           <header className="flex flex-col lg:gap-10">
             <img src={headerImage} alt="Mortal Kombat characters" />
-            <h1 className="text-center lg:text-8xl">Where's Scorpion?</h1>
+            <h1 className="text-center text-amber-400 lg:text-8xl">
+              Where's Scorpion?
+            </h1>
           </header>
           <main className="flex flex-col items-center lg:gap-20">
             <Link to="game">
@@ -44,7 +46,9 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             </Link>
             <Item variant="outline">
               <ItemContent>
-                <ItemTitle className="lg:text-6xl">Leaderboard</ItemTitle>
+                <ItemTitle className="self-center font-medium text-amber-400 lg:text-6xl">
+                  Top 50
+                </ItemTitle>
                 <ItemDescription>
                   <Suspense
                     fallback={

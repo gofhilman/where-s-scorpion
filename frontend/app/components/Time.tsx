@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import padTime from "~/lib/padTime";
 
 export default function Time() {
   const [time, setTime] = useState(0);
@@ -8,19 +9,15 @@ export default function Time() {
     return () => clearInterval(id);
   }, []);
 
-  const minutes = Math.floor(time / 6000);
-  const seconds = Math.floor((time % 6000) / 100);
-  const centiseconds = time % 100;
-
-  const pad = (n: number) => String(n).padStart(2, "0");
+  const { minutes, seconds, centiseconds } = padTime(time);
 
   return (
     <div className="grid grid-cols-[30px_max-content_30px_max-content_30px] justify-items-center">
-      <p>{pad(minutes)}</p>
+      <p>{minutes}</p>
       <p>:</p>
-      <p>{pad(seconds)}</p>
+      <p>{seconds}</p>
       <p>:</p>
-      <p>{pad(centiseconds)}</p> 
+      <p>{centiseconds}</p>
     </div>
   );
 }
