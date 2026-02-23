@@ -1,9 +1,11 @@
-import { useNavigation } from "react-router";
+import { Link, useFetcher, useNavigation } from "react-router";
 import loadingIcon from "/mk-logo.svg?url";
 import Time from "~/components/Time";
 import Board from "~/components/Board";
 import { getGame } from "~/lib/api";
 import type { Route } from "./+types/game";
+import { Button } from "~/components/ui/button";
+import { useEffect } from "react";
 
 export async function clientLoader() {
   const {
@@ -15,6 +17,15 @@ export async function clientLoader() {
 export default function Game({ loaderData }: Route.ComponentProps) {
   const { board, characters } = loaderData;
   const navigation = useNavigation();
+  const restartFetcher = useFetcher();
+  const statusFetcher = useFetcher();
+  let startedAt, finishedAt, duration, tasks, progress;
+  if (statusFetcher.data) {
+    ({ startedAt, finishedAt, duration, tasks, progress } = statusFetcher.data.status);
+  }
+  useEffect(() => {
+    statusFetcher.load("status");
+  }, []);
 
   return (
     <div className="flex flex-col gap-10">
@@ -27,18 +38,28 @@ export default function Game({ loaderData }: Route.ComponentProps) {
       ) : (
         <>
           <header className="sticky top-0 z-10">
-            <div>
+            <div className="flex items-center">
+              <h1 className="text-amber-400">
+                <Link to="/">Where's Scorpion?</Link>
+              </h1>
+              <Time startedAt={startedAt} />
+              <restartFetcher.Form action="restart" method="post">
+                <Button variant="outline" type="submit">
+                  Restart
+                </Button>
+              </restartFetcher.Form>
+            </div>
+            <div className="flex items-center">
               <p>Find:</p>
-              <div>
+              <div className="flex items-center">
                 {characters.map((character: any) => (
-                  <div key={character.id}>
+                  <div key={character.id} className="flex items-center">
                     <img src={character.image} alt="" />
                     <p>{character.name}</p>
                   </div>
                 ))}
               </div>
             </div>
-            <Time />
           </header>
           <main>
             <Board board={board} characters={characters} />
