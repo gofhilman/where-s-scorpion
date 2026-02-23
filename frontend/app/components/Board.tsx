@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 
-export default function Board({ board, characters }: any) {
+export default function Board({ board, characters, tasks, progress }: any) {
   const [open, setOpen] = useState(false);
   const [circle, setCircle] = useState(false);
   const [closing, setClosing] = useState(false);
@@ -61,8 +61,10 @@ export default function Board({ board, characters }: any) {
                 height: 0.05 * pos.width,
                 animation: `${closing ? "scale-out" : "scale-in"} 150ms forwards`,
               }}
-              className="absolute rounded-full bg-zinc-950/50"
-            />
+              className="absolute flex items-center justify-center rounded-full border-2 border-dotted border-amber-400 bg-zinc-950/50"
+            >
+              <div className="h-1 w-1 rounded-full bg-amber-400" />
+            </div>
           )}
         </DropdownMenuTrigger>
         <DropdownMenuContent
@@ -72,10 +74,18 @@ export default function Board({ board, characters }: any) {
           }}
         >
           <DropdownMenuLabel>Who is this?</DropdownMenuLabel>
-          {characters.map((character: any) => (
-            <DropdownMenuItem key={character.id}>
-              <img src={character.image} alt="" />
-              <p>{character.name}</p>
+          {tasks?.map(({ characterId }: any) => (
+            <DropdownMenuItem key={characterId}>
+              <img
+                src={
+                  characters.find((char: any) => char.id === characterId).image
+                }
+                alt=""
+                className="h-20"
+              />
+              <p>
+                {characters.find((char: any) => char.id === characterId).name}
+              </p>
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>

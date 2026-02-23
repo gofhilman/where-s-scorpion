@@ -64,7 +64,12 @@ export default function Game({ loaderData }: Route.ComponentProps) {
             </div>
           </header>
           <main>
-            <Board board={board} characters={characters} />
+            <Board
+              board={board}
+              characters={characters}
+              tasks={tasks}
+              progress={progress}
+            />
           </main>
         </>
       )}
