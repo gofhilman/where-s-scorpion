@@ -22,16 +22,16 @@ export default function Leaderboard({ leaderboardPromise }: any) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="text-right">Rank</TableHead>
-              <TableHead className="w-[150px]">Name</TableHead>
-              <TableHead className="w-[100px]">Duration</TableHead>
-              <TableHead>Date</TableHead>
+              <TableHead>Rank</TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead>Duration</TableHead>
+              <TableHead className="hidden lg:table-cell">Date</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {leaderboard.map((record: any, index: any) => (
               <TableRow key={record.id}>
-                <TableCell className="text-right">{index + 1}</TableCell>
+                <TableCell>{index + 1}</TableCell>
                 <TableCell>{record.playerName}</TableCell>
                 <TableCell>
                   {(({ minutes, seconds, centiseconds }) =>
@@ -39,7 +39,9 @@ export default function Leaderboard({ leaderboardPromise }: any) {
                     padTime(record.duration / 10),
                   )}
                 </TableCell>
-                <TableCell>{format(record.finishedAt, "MMMM d, y")}</TableCell>
+                <TableCell className="hidden lg:table-cell">
+                  {format(record.finishedAt, "MMMM d, y")}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

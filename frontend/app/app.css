@@ -128,10 +128,10 @@ body {
     @apply bg-background text-foreground;
   }
   footer a {
-    @apply text-blue-500;
+    @apply text-amber-400;
   }
   footer a:hover {
-    @apply underline decoration-blue-500;
+    @apply underline decoration-amber-400;
   }
 }
 
@@ -140,11 +140,23 @@ body {
 }
 
 @keyframes scale-in {
-  from { transform: scale(0); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 @keyframes scale-out {
-  from { transform: scale(1); opacity: 1; }
-  to { transform: scale(0); opacity: 0; }
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0);
+    opacity: 0;
+  }
 }

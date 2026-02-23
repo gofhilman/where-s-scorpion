@@ -2,7 +2,7 @@ import { Outlet } from "react-router";
 
 export default function MainLayout() {
   return (
-    <div className="mx-auto flex min-h-screen flex-col gap-10 px-5">
+    <div className="mx-auto flex min-h-screen flex-col gap-10 px-5 py-12">
       <Outlet />
       <footer className="mt-auto flex flex-col items-center">
         <p>

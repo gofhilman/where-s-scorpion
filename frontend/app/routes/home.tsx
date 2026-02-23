@@ -12,6 +12,7 @@ import {
 } from "~/components/ui/item";
 import { Suspense } from "react";
 import Leaderboard from "~/components/Leaderboard";
+import SpinnerEmpty from "~/components/SpinnerEmpty";
 
 export async function clientAction() {
   await postGame();
@@ -29,7 +30,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   const navigation = useNavigation();
 
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-10 lg:gap-15">
       {navigation.state === "loading" ? (
         <img
           src={loadingIcon}
@@ -38,36 +39,43 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         />
       ) : (
         <>
-          <header className="flex flex-col lg:gap-10">
+          <header className="mt-10 flex flex-col gap-10 lg:mt-0">
             <img src={headerImage} alt="Mortal Kombat characters" />
-            <h1 className="text-center text-amber-400 lg:text-8xl">
+            <h1 className="text-center text-4xl font-medium text-amber-400 lg:text-8xl">
               Where's Scorpion?
             </h1>
           </header>
-          <main className="flex flex-col items-center lg:gap-20">
-            <Form method="post">
-              <Button variant="outline" size="adjustable" type="submit">
-                Start
-              </Button>
-            </Form>
-            {jwtCheck && (
-              <Link to="game">
-                <Button variant="outline" size="adjustable">
-                  Resume
+          <main className="flex flex-col items-center gap-15 lg:gap-20">
+            <div className="flex items-center justify-center gap-10">
+              <Form method="post">
+                <Button
+                  variant="outline"
+                  size="adjustable"
+                  type="submit"
+                  className="font-semibold"
+                >
+                  Start
                 </Button>
-              </Link>
-            )}
-            <Item variant="outline">
-              <ItemContent>
-                <ItemTitle className="self-center font-medium text-amber-400 lg:text-6xl">
+              </Form>
+              {jwtCheck && (
+                <Link to="game">
+                  <Button
+                    variant="outline"
+                    size="adjustable"
+                    className="font-semibold"
+                  >
+                    Resume
+                  </Button>
+                </Link>
+              )}
+            </div>
+            <Item variant="outline" className="w-full max-w-150">
+              <ItemContent className="lg:gap-5">
+                <ItemTitle className="self-center text-2xl text-amber-400 lg:text-6xl">
                   Top 50
                 </ItemTitle>
                 <ItemDescription>
-                  <Suspense
-                    fallback={
-                      <img src={loadingIcon} alt="" className="animate-spin" />
-                    }
-                  >
+                  <Suspense fallback={<SpinnerEmpty />}>
                     <Leaderboard leaderboardPromise={leaderboardPromise} />
                   </Suspense>
                 </ItemDescription>
