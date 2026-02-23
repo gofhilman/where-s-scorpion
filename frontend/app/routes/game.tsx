@@ -7,6 +7,7 @@ import type { Route } from "./+types/game";
 import { Button } from "~/components/ui/button";
 import { useEffect } from "react";
 import HelpDialog from "~/components/HelpDialog";
+import CharacterDisplay from "~/components/CharacterDisplay";
 
 export async function clientLoader() {
   const {
@@ -53,18 +54,12 @@ export default function Game({ loaderData }: Route.ComponentProps) {
                 </restartFetcher.Form>
               </div>
               <div className="grid grid-cols-[auto_max-content] items-start">
-                <div className="grid grid-cols-3 justify-items-center">
-                  {characters.map((character: any) => (
-                    <div
-                      key={character.id}
-                      className="flex flex-col items-center gap-1"
-                    >
-                      <img src={character.image} alt="" className="h-20" />
-                      <p className="text-xs">{character.name}</p>
-                    </div>
-                  ))}
-                </div>
-                <HelpDialog className="justify-self-end" />
+                <CharacterDisplay characters={characters} progress={progress} />
+                <HelpDialog
+                  characters={characters}
+                  tasks={tasks}
+                  className="justify-self-end"
+                />
               </div>
             </div>
           </header>
