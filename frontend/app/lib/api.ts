@@ -42,6 +42,7 @@ async function patchGame(name: any) {
     body: JSON.stringify({ name }),
   });
   if (!response.ok) await throwError(response);
+  localStorage.removeItem("JWT");
   return await response.json();
 }
 

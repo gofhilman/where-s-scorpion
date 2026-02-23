@@ -7,7 +7,13 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 
-export default function Board({ board, characters, tasks, progress }: any) {
+export default function Board({
+  board,
+  characters,
+  tasks,
+  progress,
+  statusFetcher,
+}: any) {
   const [open, setOpen] = useState(false);
   const [circle, setCircle] = useState(false);
   const [closing, setClosing] = useState(false);
@@ -40,6 +46,19 @@ export default function Board({ board, characters, tasks, progress }: any) {
         setCircle(false);
       }, 150);
     }
+  };
+
+  const handleDropdown = (characterId: any) => {
+    statusFetcher.submit(
+      {
+        position: JSON.stringify({
+          x: (pos.x / pos.width) * 100,
+          y: (pos.y / pos.height) * 100,
+        }),
+        characterId,
+      },
+      { action: "status", method: "post" },
+    );
   };
 
   return (
@@ -75,7 +94,10 @@ export default function Board({ board, characters, tasks, progress }: any) {
         >
           <DropdownMenuLabel>Who is this?</DropdownMenuLabel>
           {tasks?.map(({ characterId }: any) => (
-            <DropdownMenuItem key={characterId}>
+            <DropdownMenuItem
+              key={characterId}
+              onSelect={() => handleDropdown(characterId)}
+            >
               <img
                 src={
                   characters.find((char: any) => char.id === characterId).image

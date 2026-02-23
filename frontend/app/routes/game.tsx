@@ -27,8 +27,10 @@ export default function Game({ loaderData }: Route.ComponentProps) {
       statusFetcher.data.status);
   }
   useEffect(() => {
-    statusFetcher.load("status");
-  }, []);
+    if (statusFetcher.state === "idle") {
+      statusFetcher.load("status");
+    }
+  }, [statusFetcher.state]);
 
   return (
     <div className="flex flex-col gap-5">
@@ -69,6 +71,7 @@ export default function Game({ loaderData }: Route.ComponentProps) {
               characters={characters}
               tasks={tasks}
               progress={progress}
+              statusFetcher={statusFetcher}
             />
           </main>
         </>
