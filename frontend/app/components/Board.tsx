@@ -1,5 +1,4 @@
 import { useState } from "react";
-import boardImage from "~/assets/mk-game.jpg?url";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 
-export default function Board({ characters }: any) {
+export default function Board({ board, characters }: any) {
   const [open, setOpen] = useState(false);
   const [circle, setCircle] = useState(false);
   const [closing, setClosing] = useState(false);
@@ -47,7 +46,7 @@ export default function Board({ characters }: any) {
     <div className="relative">
       <img
         onClick={handleClick}
-        src={boardImage}
+        src={board.image}
         alt=""
         className="w-full cursor-crosshair rounded-4xl"
       />
@@ -74,7 +73,7 @@ export default function Board({ characters }: any) {
         >
           <DropdownMenuLabel>Who is this?</DropdownMenuLabel>
           {characters.map((character: any) => (
-            <DropdownMenuItem>
+            <DropdownMenuItem key={character.id}>
               <img src={character.image} alt="" />
               <p>{character.name}</p>
             </DropdownMenuItem>

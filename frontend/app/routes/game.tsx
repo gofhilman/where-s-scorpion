@@ -2,15 +2,18 @@ import { useNavigation } from "react-router";
 import loadingIcon from "/mk-logo.svg?url";
 import Time from "~/components/Time";
 import Board from "~/components/Board";
+import { getGame } from "~/lib/api";
+import type { Route } from "./+types/game";
 
 export async function clientLoader() {
-  // const characters = getCharacters();
+  const {
+    game: { board, characters },
+  } = await getGame();
+  return { board, characters };
 }
 
-export default function Game() {
-  // Test
-  const characters: any = [];
-
+export default function Game({ loaderData }: Route.ComponentProps) {
+  const { board, characters } = loaderData;
   const navigation = useNavigation();
 
   return (
@@ -28,7 +31,7 @@ export default function Game() {
               <p>Find:</p>
               <div>
                 {characters.map((character: any) => (
-                  <div>
+                  <div key={character.id}>
                     <img src={character.image} alt="" />
                     <p>{character.name}</p>
                   </div>
@@ -38,7 +41,7 @@ export default function Game() {
             <Time />
           </header>
           <main>
-            <Board characters={characters} />
+            <Board board={board} characters={characters} />
           </main>
         </>
       )}

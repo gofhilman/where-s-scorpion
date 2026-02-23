@@ -3,6 +3,10 @@ import throwError from "./throwError";
 
 const rootUrl = import.meta.env.VITE_API_ROOT_URL;
 
+function checkJwt() {
+  return localStorage.getItem("JWT") ? true : false;
+}
+
 async function getLeaderboard() {
   const response = await fetch(rootUrl + "leaderboard");
   if (!response.ok) await throwError(response);
@@ -52,4 +56,12 @@ async function patchStatus(status: any) {
   return await response.json();
 }
 
-export { getLeaderboard, getGame, getStatus, postGame, patchGame, patchStatus };
+export {
+  checkJwt,
+  getLeaderboard,
+  getGame,
+  getStatus,
+  postGame,
+  patchGame,
+  patchStatus,
+};

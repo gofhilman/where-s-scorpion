@@ -1,6 +1,6 @@
-import { getLeaderboard } from "~/lib/api";
+import { checkJwt, getLeaderboard, postGame } from "~/lib/api";
 import type { Route } from "./+types/home";
-import { Link, useNavigation } from "react-router";
+import { Form, Link, redirect, useNavigation } from "react-router";
 import loadingIcon from "/mk-logo.svg?url";
 import headerImage from "/mk-chars.webp?url";
 import { Button } from "~/components/ui/button";
@@ -13,13 +13,19 @@ import {
 import { Suspense } from "react";
 import Leaderboard from "~/components/Leaderboard";
 
+export async function clientAction() {
+  await postGame();
+  return redirect("game");
+}
+
 export async function clientLoader() {
+  const jwtCheck = checkJwt();
   const leaderboardPromise = getLeaderboard();
-  return { leaderboardPromise };
+  return { jwtCheck, leaderboardPromise };
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
-  const { leaderboardPromise } = loaderData;
+  const { jwtCheck, leaderboardPromise } = loaderData;
   const navigation = useNavigation();
 
   return (
@@ -39,11 +45,18 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             </h1>
           </header>
           <main className="flex flex-col items-center lg:gap-20">
-            <Link to="game">
-              <Button variant="outline" size="adjustable">
-                Play
+            <Form method="post">
+              <Button variant="outline" size="adjustable" type="submit">
+                Start
               </Button>
-            </Link>
+            </Form>
+            {jwtCheck && (
+              <Link to="game">
+                <Button variant="outline" size="adjustable">
+                  Resume
+                </Button>
+              </Link>
+            )}
             <Item variant="outline">
               <ItemContent>
                 <ItemTitle className="self-center font-medium text-amber-400 lg:text-6xl">
