@@ -2,16 +2,17 @@ import { differenceInMilliseconds } from "date-fns";
 import { useEffect, useState } from "react";
 import padTime from "~/lib/padTime";
 
-export default function Time({ startedAt }: any) {
+export default function Time({ startedAt, duration }: any) {
   const [time, setTime] = useState(0);
 
   useEffect(() => {
+    if (duration) return setTime(duration / 10);
     if (startedAt) {
       setTime(differenceInMilliseconds(new Date(), startedAt) / 10);
       const id = setInterval(() => setTime((time) => time + 1), 10);
       return () => clearInterval(id);
     }
-  }, [startedAt]);
+  }, [startedAt, duration]);
 
   const { minutes, seconds, centiseconds } = padTime(time);
 

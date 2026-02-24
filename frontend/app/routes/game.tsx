@@ -1,13 +1,20 @@
-import { Link, useFetcher, useNavigation } from "react-router";
+import { Link, redirect, useFetcher, useNavigation } from "react-router";
 import loadingIcon from "/mk-logo.svg?url";
 import Time from "~/components/Time";
 import Board from "~/components/Board";
-import { getGame } from "~/lib/api";
+import { getGame, patchGame } from "~/lib/api";
 import type { Route } from "./+types/game";
 import { Button } from "~/components/ui/button";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import HelpDialog from "~/components/HelpDialog";
 import CharacterDisplay from "~/components/CharacterDisplay";
+import GameOverDialog from "~/components/GameOverDialog";
+
+export async function clientAction({ request }: Route.ClientActionArgs) {
+  const formData = await request.formData();
+  await patchGame(formData.get("name"));
+  return redirect("/");
+}
 
 export async function clientLoader() {
   const {
@@ -21,7 +28,8 @@ export default function Game({ loaderData }: Route.ComponentProps) {
   const navigation = useNavigation();
   const restartFetcher = useFetcher();
   const statusFetcher = useFetcher();
-  let startedAt, finishedAt, duration, tasks, progress;
+  const [finished, setFinished] = useState(false);
+  let startedAt: any, finishedAt: any, duration: any, tasks: any, progress: any;
   if (statusFetcher.data) {
     ({ startedAt, finishedAt, duration, tasks, progress } =
       statusFetcher.data.status);
@@ -29,6 +37,7 @@ export default function Game({ loaderData }: Route.ComponentProps) {
   useEffect(() => {
     if (statusFetcher.state === "idle") {
       statusFetcher.load("status");
+      if (finishedAt) setFinished(true);
     }
   }, [statusFetcher.state]);
 
@@ -48,7 +57,7 @@ export default function Game({ loaderData }: Route.ComponentProps) {
                 <h1 className="font-semibold text-amber-400 lg:text-3xl">
                   <Link to="/">Where's Scorpion?</Link>
                 </h1>
-                <Time startedAt={startedAt} />
+                <Time startedAt={startedAt} duration={duration} />
                 <restartFetcher.Form action="restart" method="post">
                   <Button variant="outline" type="submit">
                     Restart
@@ -72,6 +81,11 @@ export default function Game({ loaderData }: Route.ComponentProps) {
               tasks={tasks}
               progress={progress}
               statusFetcher={statusFetcher}
+            />
+            <GameOverDialog
+              finished={finished}
+              setFinished={setFinished}
+              duration={duration}
             />
           </main>
         </>
