@@ -44,7 +44,7 @@ export default function Game({ loaderData }: Route.ComponentProps) {
 
   return (
     <div className="flex flex-col gap-5">
-      {navigation.state !== "idle" ? (
+      {navigation.state !== "idle" || restartFetcher.state !== "idle" ? (
         <img
           src={loadingIcon}
           alt=""
