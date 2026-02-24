@@ -7,14 +7,10 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import ProgressMarks from "./ProgressMarks";
+import { useFetcher } from "react-router";
 
-export default function Board({
-  board,
-  characters,
-  tasks,
-  progress,
-  statusFetcher,
-}: any) {
+export default function Board({ board, characters, tasks, progress }: any) {
+  const fetcher = useFetcher();
   const [open, setOpen] = useState(false);
   const [circle, setCircle] = useState(false);
   const [closing, setClosing] = useState(false);
@@ -65,7 +61,7 @@ export default function Board({
   };
 
   const handleDropdown = (characterId: any) => {
-    statusFetcher.submit(
+    fetcher.submit(
       {
         position: JSON.stringify({
           x: (pos.x / pos.width) * 100,

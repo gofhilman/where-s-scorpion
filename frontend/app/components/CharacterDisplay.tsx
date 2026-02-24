@@ -1,8 +1,8 @@
-export default function CharacterDisplay({ characters, progress }: any) {
+export default function CharacterDisplay({ characters, progress, className }: any) {
   const collectedIds = new Set(progress?.map((item: any) => item.characterId));
 
   return (
-    <div className="grid grid-cols-3 justify-items-center">
+    <div className={"grid grid-cols-3 justify-items-center " + className}>
       {characters.map((character: any) => (
         <div
           key={character.id}

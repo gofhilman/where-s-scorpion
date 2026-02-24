@@ -35,11 +35,11 @@ export default function Game({ loaderData }: Route.ComponentProps) {
       statusFetcher.data.status);
   }
   useEffect(() => {
-    if (statusFetcher.state === "idle") {
-      statusFetcher.load("status");
-      if (finishedAt) setFinished(true);
-    }
-  }, [statusFetcher.state]);
+    statusFetcher.load("status");
+  }, []);
+  useEffect(() => {
+    if (finishedAt) setFinished(true);
+  }, [finishedAt]);
 
   return (
     <div className="flex flex-col gap-5">
@@ -47,7 +47,7 @@ export default function Game({ loaderData }: Route.ComponentProps) {
         <img
           src={loadingIcon}
           alt=""
-          className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-spin"
+          className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-[spin_2s_linear_infinite]"
         />
       ) : (
         <>
@@ -65,7 +65,13 @@ export default function Game({ loaderData }: Route.ComponentProps) {
                 </restartFetcher.Form>
               </div>
               <div className="grid grid-cols-[auto_max-content] items-start">
-                <CharacterDisplay characters={characters} progress={progress} />
+                <CharacterDisplay
+                  characters={characters}
+                  progress={progress}
+                  className={
+                    statusFetcher.state === "idle" ? "" : "animate-pulse"
+                  }
+                />
                 <HelpDialog
                   characters={characters}
                   tasks={tasks}
@@ -80,7 +86,6 @@ export default function Game({ loaderData }: Route.ComponentProps) {
               characters={characters}
               tasks={tasks}
               progress={progress}
-              statusFetcher={statusFetcher}
             />
             <GameOverDialog
               finished={finished}

@@ -35,7 +35,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         <img
           src={loadingIcon}
           alt=""
-          className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-spin"
+          className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-[spin_2s_linear_infinite]"
         />
       ) : (
         <>
