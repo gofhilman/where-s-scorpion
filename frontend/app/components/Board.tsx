@@ -10,7 +10,7 @@ import ProgressMarks from "./ProgressMarks";
 import { useFetcher } from "react-router";
 
 export default function Board({ board, characters, tasks, progress }: any) {
-  const fetcher = useFetcher();
+  const fetcher = useFetcher({ key: "check" });
   const [open, setOpen] = useState(false);
   const [circle, setCircle] = useState(false);
   const [closing, setClosing] = useState(false);

@@ -31,7 +31,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
 
   return (
     <div className="flex flex-col gap-10 pt-12 lg:gap-15">
-      {navigation.state === "loading" ? (
+      {navigation.state !== "idle" ? (
         <img
           src={loadingIcon}
           alt=""

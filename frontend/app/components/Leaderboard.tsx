@@ -15,7 +15,7 @@ export default function Leaderboard({ leaderboardPromise }: any) {
   return (
     <div>
       {leaderboard.length === 0 ? (
-        <p>
+        <p className="text-center">
           <i>No players yet</i>
         </p>
       ) : (

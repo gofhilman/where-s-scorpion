@@ -28,6 +28,7 @@ export default function Game({ loaderData }: Route.ComponentProps) {
   const navigation = useNavigation();
   const restartFetcher = useFetcher();
   const statusFetcher = useFetcher();
+  const checkFetcher = useFetcher({ key: "check" });
   const [finished, setFinished] = useState(false);
   let startedAt: any, finishedAt: any, duration: any, tasks: any, progress: any;
   if (statusFetcher.data) {
@@ -43,7 +44,7 @@ export default function Game({ loaderData }: Route.ComponentProps) {
 
   return (
     <div className="flex flex-col gap-5">
-      {navigation.state === "loading" ? (
+      {navigation.state !== "idle" ? (
         <img
           src={loadingIcon}
           alt=""
@@ -69,7 +70,7 @@ export default function Game({ loaderData }: Route.ComponentProps) {
                   characters={characters}
                   progress={progress}
                   className={
-                    statusFetcher.state === "idle" ? "" : "animate-pulse"
+                    checkFetcher.state === "idle" ? "" : "animate-pulse"
                   }
                 />
                 <HelpDialog
