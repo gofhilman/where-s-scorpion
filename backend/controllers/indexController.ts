@@ -106,7 +106,7 @@ async function statusPatch(req: any, res: any) {
     },
   });
   const characters = game?.tasks.map((task) => task.character);
-  const character = checkPosition(characters, position);
+  const character = checkPosition(characters, position, characterId);
   if (character && game) {
     let status = await prisma.history.update({
       where: { id: req.user.id },

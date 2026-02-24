@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,6 +6,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import ProgressMarks from "./ProgressMarks";
 
 export default function Board({
   board,
@@ -18,6 +19,21 @@ export default function Board({
   const [circle, setCircle] = useState(false);
   const [closing, setClosing] = useState(false);
   const [pos, setPos] = useState({ x: 0, y: 0, width: 0, height: 0 });
+  const imgRef = useRef<HTMLImageElement>(null);
+  const [imgSize, setImgSize] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    const img = imgRef.current;
+    if (!img) return;
+    const observer = new ResizeObserver(([entry]) => {
+      setImgSize({
+        width: entry.contentRect.width,
+        height: entry.contentRect.height,
+      });
+    });
+    observer.observe(img);
+    return () => observer.disconnect();
+  }, []);
 
   const handleClick = (event: any) => {
     const rect = event.target.getBoundingClientRect();
@@ -64,11 +80,13 @@ export default function Board({
   return (
     <div className="relative">
       <img
+        ref={imgRef}
         onClick={handleClick}
         src={board.image}
         alt=""
         className="w-full cursor-crosshair rounded-4xl"
       />
+      <ProgressMarks progress={progress} imgSize={imgSize} />
       <DropdownMenu open={open} onOpenChange={handleOpenChange}>
         <DropdownMenuTrigger asChild>
           {circle && (
