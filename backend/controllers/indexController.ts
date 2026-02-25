@@ -18,6 +18,7 @@ async function leaderboardGet(req: any, res: any) {
     },
     where: {
       duration: { not: null },
+      playerName: { not: null },
     },
   });
   res.json({ leaderboard });
