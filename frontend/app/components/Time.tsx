@@ -18,7 +18,7 @@ export default function Time({ startedAt, duration }: any) {
 
   return (
     <div className="grid grid-cols-[30px_max-content_30px_max-content_30px] justify-items-center font-semibold lg:grid-cols-[50px_max-content_50px_max-content_50px] lg:text-3xl">
-      <p>{minutes}</p>
+      <p className="justify-self-end mr-2">{minutes}</p>
       <p>:</p>
       <p>{seconds}</p>
       <p>:</p>

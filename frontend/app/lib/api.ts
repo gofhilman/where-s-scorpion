@@ -1,3 +1,4 @@
+import { fetchWithRetry } from "./fetchWithRetry";
 import { jsonContentJwtHeaders, jwtHeaders } from "./httpHeaders";
 import throwError from "./throwError";
 
@@ -8,27 +9,27 @@ function checkJwt() {
 }
 
 async function getLeaderboard() {
-  const response = await fetch(rootUrl + "leaderboard");
+  const response = await fetchWithRetry(rootUrl + "leaderboard");
   if (!response.ok) await throwError(response);
   return await response.json();
 }
 
 async function getGame() {
   const headers = jwtHeaders(new Headers());
-  const response = await fetch(rootUrl + "game", { headers });
+  const response = await fetchWithRetry(rootUrl + "game", { headers });
   if (!response.ok) await throwError(response);
   return await response.json();
 }
 
 async function getStatus() {
   const headers = jwtHeaders(new Headers());
-  const response = await fetch(rootUrl + "status", { headers });
+  const response = await fetchWithRetry(rootUrl + "status", { headers });
   if (!response.ok) await throwError(response);
   return await response.json();
 }
 
 async function postGame() {
-  const response = await fetch(rootUrl + "game", { method: "POST" });
+  const response = await fetchWithRetry(rootUrl + "game", { method: "POST" });
   if (!response.ok) await throwError(response);
   const { token } = await response.json();
   localStorage.setItem("JWT", token);
@@ -36,7 +37,7 @@ async function postGame() {
 
 async function patchGame(name: any) {
   const headers = jsonContentJwtHeaders(new Headers());
-  const response = await fetch(rootUrl + "game", {
+  const response = await fetchWithRetry(rootUrl + "game", {
     method: "PATCH",
     headers,
     body: JSON.stringify({ name }),
@@ -48,7 +49,7 @@ async function patchGame(name: any) {
 
 async function patchStatus(status: any) {
   const headers = jsonContentJwtHeaders(new Headers());
-  const response = await fetch(rootUrl + "status", {
+  const response = await fetchWithRetry(rootUrl + "status", {
     method: "PATCH",
     headers,
     body: JSON.stringify(status),

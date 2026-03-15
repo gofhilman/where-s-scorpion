@@ -10,7 +10,7 @@ import type { Route } from "./+types/root";
 import "./app.css";
 import loadingIcon from "/mk-logo.svg?url";
 
-export async function HydrateFallback() {
+export function HydrateFallback() {
   return (
     <img
       src={loadingIcon}

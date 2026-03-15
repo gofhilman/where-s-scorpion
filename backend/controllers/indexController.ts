@@ -80,7 +80,7 @@ async function gamePost(req: any, res: any) {
       (() => {
         throw new Error("JWT_SECRET missing");
       })(),
-    { expiresIn: "1 day" },
+    {},
     (err, token) => {
       res.json({ token });
     },
