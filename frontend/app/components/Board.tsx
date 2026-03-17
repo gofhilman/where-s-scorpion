@@ -43,7 +43,7 @@ export default function Board({ board, characters, tasks, progress }: any) {
     setCircle(true);
     setClosing(false);
 
-    // For data collection
+    // // For data collection
     // console.log(
     //   `x: ${(((event.clientX - rect.left) / rect.width) * 100).toFixed(3)}, y: ${(((event.clientY - rect.top) / rect.height) * 100).toFixed(3)}`,
     //   `(width: ${rect.width.toFixed(3)}, height: ${rect.height.toFixed(3)})`,
